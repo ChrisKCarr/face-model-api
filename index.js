@@ -1,6 +1,9 @@
+const bcrypt = require("bcrypt");
 const cors = require("cors");
 const express = require("express");
 const knex = require("knex");
+
+const register = require("./controllers/register");
 
 const app = express();
 
@@ -15,11 +18,15 @@ app.use(express.json());
 const database = knex({
   client: "pg",
   connection: {
-    host: '127.0.0.1',
-    user: 'postgres',
-    password: 'post',
-    database: 'face-model-storage',
-  }
+    host: "127.0.0.1",
+    user: "postgres",
+    password: "post",
+    database: "face-model-storage",
+  },
+});
+
+app.post("/register", (req, res) => {
+  register(req, res, database, bcrypt);
 });
 
 app.get("/", (req, res) => {
