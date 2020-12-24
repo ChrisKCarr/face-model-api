@@ -2,6 +2,45 @@
 
 The face-model-api is a backend api for the project [face-model](https://github.com/harshcut/face-model) with backend authentication and a PostgreSQL database, hosted on Heroku. Get response from Clarifai API and see it visualize. More on Clarifai's `face-detection` model can be found [here](https://www.clarifai.com/models/face-detection).
 
+## PostgreSQL Database
+
+PostgreSQL is a powerful, open source object-relational database system that uses and extends the `SQL` language combined with many features that safely store and scale the most complicated data workloads. Create a database to store two tables.
+
+### Create Database
+
+`CREATE DATABASE` creates a new PostgreSQL database.
+
+```sql
+CREATE DATABASE "face-model-storage";
+```
+
+### Create Tables
+
+To create a new table, you use the `CREATE TABLE` statement. Make sure to create the tables in the `face-model-storage` database.
+
+```sql
+CREATE TABLE "face-model-registry" (
+  id VARCHAR(36) NOT NULL PRIMARY KEY,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  entries INTEGER NOT NULL DEFAULT 0
+);
+```
+
+Registered user credentials are stored in `face-model-registry` and their detection history is logged in `face-model-history`.
+
+```sql
+CREATE TABLE "face-model-history" (
+  serial SERIAL NOT NULL PRIMARY KEY,
+  timestamp TIMESTAMP NOT NULL,
+  id VARCHAR(36) NOT NULL,
+  email TEXT NOT NULL,
+  image TEXT NOT NULL
+);
+```
+
 ## Developing
 
 Fork the repository using [this](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) guide, then clone it locally.
