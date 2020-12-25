@@ -13,19 +13,25 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: true,
+    origin: process.env.ORIGIN || true,
   })
 );
 app.use(express.json());
 
 const database = knex({
   client: "pg",
-  connection: {
-    host: "127.0.0.1",
-    user: "postgres",
-    password: "post",
-    database: "face-model-storage",
-  },
+  connection:
+    process.env.DEV === "true"
+      ? {
+          host: "127.0.0.1",
+          user: "postgres",
+          password: "post",
+          database: "face-model-storage",
+        }
+      : {
+          connectionString: process.env.DATABASE_URL,
+          ssl: { rejectUnauthorized: false },
+        },
 });
 
 app.post("/register", (req, res) => {
